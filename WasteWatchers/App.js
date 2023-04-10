@@ -18,3 +18,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+// git add *
+// git commit -m "uwu"
+// git push origin main
+
+//if conflicts:
+  // git stash
+  // git pul;
