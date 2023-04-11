@@ -5,6 +5,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SignUpPage from './SignUpPage';
+import LoginPage from './LogInPage';
 
 async function changeScreenOrientation() {
   await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
@@ -20,11 +21,17 @@ export default function App() {
     console.log('Sign Up button pressed');
   };
 
+  const handleLogInPress = () => {
+      // Implement navigation or other actions for log in button press
+      console.log('Log In button pressed');
+    };
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="SignUp" component={SignUpPage} />
+        <Stack.Screen name="LogIn" component={LoginPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -34,7 +41,10 @@ function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Waste Watchers</Text>
-      <TouchableOpacity style={styles.loginButton}>
+      <TouchableOpacity
+      style={styles.loginButton}
+      onPress={() => navigation.navigate('LogIn')}
+      >
         <Text style={styles.buttonText}>Log In</Text>
       </TouchableOpacity>
       <TouchableOpacity
