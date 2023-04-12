@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   input: {
-    width: '80%',
+    width: 200,
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   loginButton: {
-    width: '80%',
+    width: 200,
     backgroundColor: 'black',
     padding: 10,
     borderRadius: 5,

@@ -22,6 +22,7 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="SignUp" component={SignUpPage} />
         <Stack.Screen name="LogIn" component={LogInPage} />
+        <Stack.Screen name="WhyAccount" component={WhyAccountPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -35,17 +36,23 @@ function HomeScreen({ navigation }) {
   };
 
   const handleLogInPress = () => {
-      // Implement navigation or other actions for log in button press
-      console.log('Log In button pressed');
-      navigation.navigate('LogIn');
+    // Implement navigation or other actions for log in button press
+    console.log('Join Game button pressed');
+    navigation.navigate('LogIn');
+  };
+
+  const handleWhyAccountPress = () => {
+    // Implement navigation or other actions for Why Account button press
+    console.log('Why Account button pressed');
+    navigation.navigate('WhyAccount');
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Waste Watchers</Text>
       <TouchableOpacity
-      style={styles.loginButton}
-      onPress={handleLogInPress}
+        style={styles.loginButton}
+        onPress={handleLogInPress}
       >
         <Text style={styles.buttonText}>Log In</Text>
       </TouchableOpacity>
@@ -55,9 +62,40 @@ function HomeScreen({ navigation }) {
       >
         <Text style={styles.signupButtonText}>Sign Up</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.questionButton}
+        onPress={handleWhyAccountPress}
+      >
+        <Text style={styles.questionButtonText}>Why create an account?</Text>
+      </TouchableOpacity>
+
     </View>
   );
 }
+
+function WhyAccountPage({ navigation }) {
+  const handleSignUpPress = () => {
+    // Implement navigation or other actions for sign up button press
+    console.log('Sign Up button pressed');
+    navigation.navigate('SignUp');
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Why create an account?</Text>
+      <Text style={styles.description}>
+        Creating an account allows you to access the game. As the game is still in beta we require all users to create an account before they can play. It also allows you to provide us with your feedback so we can continue developing an educational game, that you want to play. Thanks for your understanding and have fun!
+      </Text>
+      <TouchableOpacity
+        style={styles.signupButton}
+        onPress={handleSignUpPress}
+      >
+        <Text style={styles.signupButtonText}>Sign Up</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
 
 const styles = StyleSheet.create({
   container: {
@@ -80,7 +118,7 @@ const styles = StyleSheet.create({
   },
   signupButton: {
     width: 200,
-    backgroundColor: 'white',
+    backgroundColor: 'white', // Removed fixed width
     borderWidth: 1,
     borderColor: 'black',
     padding: 10,
@@ -99,4 +137,23 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  questionButton: {
+    backgroundColor: 'white', // Removed fixed width
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+    marginTop: 10, // Added margin top for spacing
+  },
+  questionButtonText: {
+    color: 'blue', // Updated text color
+    fontSize: 12, // Updated font size to 12
+    fontWeight: 'bold',
+    textAlign: 'center',
+    textDecorationLine: 'underline', // Added underline
+  },
+  description: {
+    marginHorizontal: 100, // Add margin horizontal of 50px
+    textAlign: 'center', // Add text alignment to center
+    marginBottom: 40
+  }
 });
