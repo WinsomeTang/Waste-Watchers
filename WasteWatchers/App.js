@@ -5,7 +5,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SignUpPage from './SignUpPage';
-import LoginPage from './LogInPage';
+import LogInPage from './LogInPage';
 
 async function changeScreenOrientation() {
   await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
@@ -16,40 +16,42 @@ const Stack = createStackNavigator();
 export default function App() {
   changeScreenOrientation();
 
-  const handleSignUpPress = () => {
-    // Implement navigation or other actions for sign up button press
-    console.log('Sign Up button pressed');
-  };
-
-  const handleLogInPress = () => {
-      // Implement navigation or other actions for log in button press
-      console.log('Log In button pressed');
-    };
-
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="SignUp" component={SignUpPage} />
-        <Stack.Screen name="LogIn" component={LoginPage} />
+        <Stack.Screen name="LogIn" component={LogInPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
 function HomeScreen({ navigation }) {
+  const handleSignUpPress = () => {
+    // Implement navigation or other actions for sign up button press
+    console.log('Sign Up button pressed');
+    navigation.navigate('SignUp');
+  };
+
+  const handleLogInPress = () => {
+      // Implement navigation or other actions for log in button press
+      console.log('Log In button pressed');
+      navigation.navigate('LogIn');
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Waste Watchers</Text>
       <TouchableOpacity
       style={styles.loginButton}
-      onPress={() => navigation.navigate('LogIn')}
+      onPress={handleLogInPress}
       >
         <Text style={styles.buttonText}>Log In</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.signupButton}
-        onPress={() => navigation.navigate('SignUp')}
+        onPress={handleSignUpPress}
       >
         <Text style={styles.signupButtonText}>Sign Up</Text>
       </TouchableOpacity>
@@ -98,11 +100,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
-// git add *
-// git commit -m "uwu"
-// git push origin main
-
-//if conflicts:
-  // git stash
-  // git pul;
