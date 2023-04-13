@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SignUpPage from './SignUpPage';
 import LogInPage from './LogInPage';
 import GamePage from './GamePage';
+import HowToPlayPage from './HowToPlayPage';
 
 
 async function changeScreenOrientation() {
@@ -20,12 +21,18 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator
+        initialRouteName="Home"
+        screenOptions={{
+          headerShown: false
+        }}
+      >
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="SignUp" component={SignUpPage} />
         <Stack.Screen name="LogIn" component={LogInPage} />
         <Stack.Screen name="WhyAccount" component={WhyAccountPage} />
         <Stack.Screen name="Game" component={GamePage} />
+        <Stack.Screen name="HowToPlayPage" component={HowToPlayPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -54,7 +61,7 @@ function HomeScreen({ navigation }) {
       // Implement navigation or other actions for Why Account button press
       console.log('Quick Play button pressed');
       navigation.navigate('Game');
-    };
+  };
 
   return (
     <View style={styles.container}>
@@ -77,6 +84,8 @@ function HomeScreen({ navigation }) {
       >
         <Text style={styles.questionButtonText}>Why create an account?</Text>
       </TouchableOpacity>
+
+
       <TouchableOpacity
         style={styles.signupButton}
         onPress={handleQuickPlayPress}

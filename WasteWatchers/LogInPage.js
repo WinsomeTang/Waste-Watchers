@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { findUser } from './Users'; // Import the findUser function from Users.js
+import { findUser } from './Users';
 
 export default function LogInPage({ navigation }) {
   const [username, setUsername] = useState('');
@@ -22,8 +22,8 @@ export default function LogInPage({ navigation }) {
     }
 
     // Navigate to Game.js
-    console.log('Join Game button pressed');
-    navigation.navigate('Game'); // Add this line to navigate to the Game.js page
+    console.log('Continue button pressed');
+    navigation.navigate('HowToPlayPage');
   };
 
   return (
@@ -44,7 +44,7 @@ export default function LogInPage({ navigation }) {
       />
       {error !== '' && <Text style={styles.errorText}>{error}</Text>}
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Join game!</Text>
+        <Text style={styles.buttonText}>Continue</Text>
       </TouchableOpacity>
     </View>
   );
