@@ -1,5 +1,11 @@
-import React, { useState } from "react";
-import { View, Image, StyleSheet, Animated, PanResponder } from "react-native";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  View,
+  Image,
+  StyleSheet,
+  Animated,
+  PanResponder,
+} from "react-native";
 import backgroundImage from "./images/belt_static.png";
 import wheel1Image from "./images/wheel1.png";
 import wheel2Image from "./images/wheel2.png";
@@ -14,18 +20,32 @@ import appleImage from "./images/Apple.png";
 
 const GamePage = ({ navigation }) => {
   const [applePosition, setApplePosition] = useState({ x: 0, y: 0 });
+  const appleAnimatedValue = useRef(new Animated.ValueXY({ x: 10, y: 10 })).current;
+  const [didSlide, setDidSlide] = useState(false);
 
-  const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onPanResponderMove: (event, gesture) => {
-      setApplePosition({ x: gesture.moveX, y: gesture.moveY });
-    },
-    onPanResponderRelease: () => {},
-  });
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onPanResponderMove: (event, gesture) => {
+        setDidSlide(true);
+        setApplePosition({ x: gesture.moveX, y: gesture.moveY });
+      },
+      onPanResponderRelease: () => {},
+    })
+  ).current;
 
-  React.useLayoutEffect(() => {
+  useEffect(() => {
     navigation.setOptions({ headerShown: false });
-  }, [navigation]);
+
+    // Add the animation code here
+    Animated.timing(appleAnimatedValue, {
+      toValue: { x: 350, y: 100 },
+
+      duration: 4000,
+      useNativeDriver: false,
+      isInteraction: false,
+    }).start();
+  }, [navigation, appleAnimatedValue]);
 
   return (
     <View style={styles.container}>
@@ -63,9 +83,14 @@ const GamePage = ({ navigation }) => {
       <Image source={recyclingBinImage} style={styles.binImage} />
       <Image source={organicsBinImage} style={styles.binImage} />
       <Image source={landfillImage} style={styles.landfillImage} />
+
       <Animated.Image
         source={appleImage}
-        style={[styles.appleImage, { top: applePosition.y, left: applePosition.x }]}
+        style={
+          didSlide
+            ? [styles.appleImage, { top: applePosition.y, left: applePosition.x }]
+            : [styles.appleImage, { transform: appleAnimatedValue.getTranslateTransform() }]
+        }
         {...panResponder.panHandlers}
       />
     </View>
