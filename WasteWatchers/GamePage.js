@@ -9,6 +9,7 @@ import landfillImage from "./images/Landfill.png";
 import ewasteBinImage from "./images/EwasteBin.png";
 import recyclingBinImage from "./images/RecyclingBin.png";
 import organicsBinImage from "./images/OrganicsBin.png";
+//base layout
 
 const GamePage = ({ navigation }) => {
   React.useLayoutEffect(() => {
