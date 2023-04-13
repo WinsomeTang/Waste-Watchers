@@ -21,9 +21,9 @@ export default function LogInPage({ navigation }) {
       return;
     }
 
-    // Implement actions for login button press
-    console.log('Login button pressed');
-    // You can navigate to other screens or perform other actions here
+    // Navigate to Game.js
+    console.log('Join Game button pressed');
+    navigation.navigate('Game'); // Add this line to navigate to the Game.js page
   };
 
   return (
