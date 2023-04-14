@@ -5,7 +5,9 @@ import {
   StyleSheet,
   Animated,
   PanResponder,
+  Text,
 } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 import backgroundImage from "./images/belt_static.png";
 import wheel1Image from "./images/wheel1.png";
 import wheel2Image from "./images/wheel2.png";
@@ -20,6 +22,7 @@ import AppleImage from './trashImages/Apple.png';
 import BananaImage from './trashImages/Banana.png';
 import PizzaImage from './trashImages/Pizza.png';
 import FishBoneImage from './trashImages/FishBone.png';
+import GameOverPage from './GameOverPage'
 
 
 const trashImages = [
@@ -30,14 +33,14 @@ const trashImages = [
     require('./trashImages/CarBattery.png'),
     require('./trashImages/CoffeeCup.png'),
     require('./trashImages/FishBone.png'),
-    require('./trashImages/Mask.png'),
+//    require('./trashImages/Mask.png'),
     require('./trashImages/MetalCan.png'),
-    require('./trashImages/Mug.png'),
+//    require('./trashImages/Mug.png'),
     require('./trashImages/PaperPlane.png'),
     require('./trashImages/Phone.png'),
     require('./trashImages/Pizza.png'),
-    require('./trashImages/PlasticBag.png'),
-    require('./trashImages/Straw.png'),
+//    require('./trashImages/PlasticBag.png'),
+//    require('./trashImages/Straw.png'),
     require('./trashImages/Tab.png'),
 ];
 
@@ -72,11 +75,14 @@ const getRandomTrashImage = () => {
 
 // Generate a random duration between 1 and 5 seconds
 const getRandomDuration = () => {
-  return Math.floor(Math.random() * 2500) + 1000; // Random duration between 1 and 3.5 seconds
+  return Math.floor(Math.random() * 7000) + 2000; // Random duration for speed
 };
 
 
-const GamePage = ({ navigation }) => {
+
+const GamePage = () => {
+  const [conditionMet, setConditionMet] = useState(false);
+    const navigation = useNavigation();
   const [object1Position, setObject1Position] = useState({ x: 0, y: 0 });
   const [object2Position, setObject2Position] = useState({ x: 0, y: 0 });
   const [object3Position, setObject3Position] = useState({ x: 0, y: 0 });
@@ -90,11 +96,10 @@ const GamePage = ({ navigation }) => {
   const [object2Image, setObject2Image] = useState(getRandomTrashImage());
   const [object3Image, setObject3Image] = useState(getRandomTrashImage());
   const [inBin, setObjInBin] = useState(false);
-  const [lBinPosition, setLBinPosition] = useState({x:0, y:0 });
   const orgBinPosition = { x: 365, y: 75 };
   const recBinPosition = { x: 216, y: 4 };
   const eBinPosition = { x: 26, y: 182 };
-
+  const lfPosition = { x: 360, y: 220};
 
 
   const respawnObject = (objectNumber) => {
@@ -192,11 +197,37 @@ const GamePage = ({ navigation }) => {
         const eBinTop = eBinY - radius;
         const eBinBottom = eBinY + 100 + radius;
 
+        if (
+            (gesture.moveX >= lfPosition.x - 10 && gesture.moveX <= lfPosition.x + 10) &&
+            (gesture.moveY >= lfPosition.y - 10 && gesture.moveY <= lfPosition.y + 10)
+          ) {
+            if (landfillWaste.includes(object1Image)){
+              console.log(obj1X, obj1Y);
+              console.log("location matches AND ITEM MATCHES!");
+              Animated.timing(object1AnimatedValue, {
+                toValue: { x: 10, y: 10 }, // Reset to initial position
+                duration: 0,
+                useNativeDriver: false,
+              }).start(() => {
+                respawnObject(1); // Respawn object 1
+              });
+            } else {
+              console.log("location matches BUT ITEM DOES NOT MATCH!");
+              console.log(obj1X, obj1Y);
+              Animated.timing(object1AnimatedValue, {
+                toValue: { x: 10, y: 10 }, // Reset to initial position
+                duration: 0,
+                useNativeDriver: false,
+              }).start(() => {
+                respawnObject(1); // Respawn object 1
+              });
+              navigation.navigate('GameOver');
+            }
+          }
         // Check if item is within ewaste bin
         if ((obj1X >= orgBinLeft) && (obj1X <= orgBinRight) && (obj1Y >= orgBinTop) && (obj1Y <= orgBinBottom) && (distanceOrg <= radius)) {
           setObjInBin(true);
           if (organicWaste.includes(object1Image)) {
-            //counter++ or something
             console.log(obj1X, obj1Y);
             console.log("location matches AND ITEM MATCHES!");
             Animated.timing(object1AnimatedValue, {
@@ -216,11 +247,11 @@ const GamePage = ({ navigation }) => {
             }).start(() => {
               respawnObject(1); // Respawn object 1
             });
+            navigation.navigate('GameOver');
           }
         } else if ((obj1X >= recBinLeft) && (obj1X <= recBinRight) && (obj1Y >= recBinTop) && (obj1Y <= recBinBottom) && (distanceRec <= radius)) {
             setObjInBin(true);
               if (recyclables.includes(object1Image)) {
-                //counter++ or something
                 console.log(obj1X, obj1Y);
                 console.log("location matches AND ITEM MATCHES!");
                 Animated.timing(object1AnimatedValue, {
@@ -239,12 +270,13 @@ const GamePage = ({ navigation }) => {
                   useNativeDriver: false,
                 }).start(() => {
                   respawnObject(1); // Respawn object 1
+
                 });
+                navigation.navigate('GameOver');
               }
           } else if ((obj1X >= eBinLeft) && (obj1X <= eBinRight) && (obj1Y >= eBinTop) && (obj1Y <= eBinBottom) && (distanceE <= radius)) {
             setObjInBin(true);
               if (electronicsWaste.includes(object1Image)) {
-                //counter++ or something
                 console.log(obj1X, obj1Y);
                 console.log("location matches AND ITEM MATCHES!");
                 Animated.timing(object1AnimatedValue, {
@@ -264,6 +296,7 @@ const GamePage = ({ navigation }) => {
                 }).start(() => {
                   respawnObject(1); // Respawn object 1
                 });
+                navigation.navigate('GameOver');
               }
           }
         else {
@@ -323,7 +356,6 @@ const GamePage = ({ navigation }) => {
           if ((obj2X >= orgBinLeft) && (obj2X <= orgBinRight) && (obj2Y >= orgBinTop) && (obj2Y <= orgBinBottom) && (distanceOrg <= radius)) {
             setObjInBin(true);
             if (organicWaste.includes(object2Image)) {
-              //counter++ or something
               console.log(obj2X, obj2Y);
               console.log("location matches AND ITEM MATCHES!");
               Animated.timing(object2AnimatedValue, {
@@ -343,6 +375,7 @@ const GamePage = ({ navigation }) => {
               }).start(() => {
                 respawnObject(2); // Respawn object 1
               });
+              navigation.navigate('GameOver');
             }
           } else if ((obj2X >= recBinLeft) && (obj2X <= recBinRight) && (obj2Y >= recBinTop) && (obj2Y <= recBinBottom) && (distanceRec <= radius)) {
             setObjInBin(true);
@@ -367,6 +400,7 @@ const GamePage = ({ navigation }) => {
                 }).start(() => {
                   respawnObject(2); // Respawn object 1
                 });
+                navigation.navigate('GameOver');
               }
           } else if ((obj2X >= eBinLeft) && (obj2X <= eBinRight) && (obj2Y >= eBinTop) && (obj2Y <= eBinBottom) && (distanceE <= radius)) {
             setObjInBin(true);
@@ -391,6 +425,7 @@ const GamePage = ({ navigation }) => {
                 }).start(() => {
                   respawnObject(2); // Respawn object 2
                 });
+                navigation.navigate('GameOver');
               }
           } else {
             console.log("location does not match");
@@ -469,6 +504,7 @@ const GamePage = ({ navigation }) => {
             }).start(() => {
               respawnObject(3); // Respawn object 1
             });
+            navigation.navigate('GameOver');
           }
         } else if ((obj3X >= recBinLeft) && (obj3X <= recBinRight) && (obj3Y >= recBinTop) && (obj3Y <= recBinBottom) && (distanceRec <= radius)) {
           setObjInBin(true);
@@ -493,6 +529,7 @@ const GamePage = ({ navigation }) => {
               }).start(() => {
                 respawnObject(3); // Respawn object 1
               });
+              navigation.navigate('GameOver');
             }
         } else if ((obj3X >= eBinLeft) && (obj3X <= eBinRight) && (obj3Y >= eBinTop) && (obj3Y <= eBinBottom) && (distanceE <= radius)) {
           setObjInBin(true);
@@ -517,6 +554,7 @@ const GamePage = ({ navigation }) => {
               }).start(() => {
                 respawnObject(3); // Respawn object 1
               });
+              navigation.navigate('GameOver');
             }
         } else {
           console.log("location does not match");
@@ -616,9 +654,6 @@ const GamePage = ({ navigation }) => {
         />
     </View>
   );
-
-
-
 };
 
 const styles = StyleSheet.create({

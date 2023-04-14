@@ -87,14 +87,6 @@ function HomeScreen({ navigation }) {
         <Text style={styles.questionButtonText}>Why create an account?</Text>
       </TouchableOpacity>
 
-
-      <TouchableOpacity
-        style={styles.signupButton}
-        onPress={handleQuickPlayPress}
-      >
-        <Text style={styles.signupButtonText}>Quick Play</Text>
-      </TouchableOpacity>
-
     </View>
   );
 }

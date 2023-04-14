@@ -1,5 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {score} from './GamePage';
+
 
 export default function GameOverPage({ navigation }) {
   const handleHomePress = () => {
@@ -8,9 +10,9 @@ export default function GameOverPage({ navigation }) {
   };
   return (
         <View style={styles.container}>
-          <Text style={styles.title}>Game Over !</Text>
+          <Text style={styles.title}>Game Over ! :(</Text>
           <Text style={styles.score}>
-
+          Current Score: 1{score}
           </Text>
           <TouchableOpacity
             style={styles.homeButton}

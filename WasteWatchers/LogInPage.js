@@ -23,7 +23,7 @@ export default function LogInPage({ navigation }) {
 
     // Navigate to Game.js
     console.log('Continue button pressed');
-    navigation.navigate('HowToPlayPage');
+    navigation.navigate('HowToPlay');
   };
 
   return (
