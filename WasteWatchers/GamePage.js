@@ -16,6 +16,11 @@ import ewasteBinImage from "./images/EwasteBin.png";
 import recyclingBinImage from "./images/RecyclingBin.png";
 import organicsBinImage from "./images/OrganicsBin.png";
 import * as Animatable from "react-native-animatable";
+import AppleImage from './trashImages/Apple.png';
+import BananaImage from './trashImages/Banana.png';
+import PizzaImage from './trashImages/Pizza.png';
+import FishBoneImage from './trashImages/FishBone.png';
+
 
 const trashImages = [
     require('./trashImages/Apple.png'),
@@ -34,6 +39,30 @@ const trashImages = [
     require('./trashImages/PlasticBag.png'),
     require('./trashImages/Straw.png'),
     require('./trashImages/Tab.png'),
+];
+
+const organicWaste = [AppleImage, BananaImage, PizzaImage, FishBoneImage];
+
+
+const recyclables = [
+  require('./trashImages/Bottle.png'),
+  require('./trashImages/CoffeeCup.png'),
+  require('./trashImages/PaperPlane.png'),
+  require('./trashImages/MetalCan.png'),
+];
+
+const landfillWaste = [
+  require('./trashImages/Mask.png'),
+  require('./trashImages/Mug.png'),
+  require('./trashImages/PlasticBag.png'),
+  require('./trashImages/Straw.png'),
+];
+
+const electronicsWaste = [
+  require('./trashImages/Batteries.png'),
+  require('./trashImages/CarBattery.png'),
+  require('./trashImages/Phone.png'),
+  require('./trashImages/Tab.png'),
 ];
 
 const getRandomTrashImage = () => {
@@ -60,8 +89,14 @@ const GamePage = ({ navigation }) => {
   const [object2Image, setObject2Image] = useState(getRandomTrashImage());
   const [object3Image, setObject3Image] = useState(getRandomTrashImage());
   const [inBin, setObjInBin] = useState(false);
+  const [recBinPosition, setRecBinPosition] = useState({x: 0, y: 0});
+//  const [orgBinPosition, setOrgBinPosition] = useState({x:0, y:0 });
+  const [eBinPosition, setEBinPosition] = useState({x:10, y:390 });
+  const [lBinPosition, setLBinPosition] = useState({x:0, y:0 });
+  const orgBinPosition = { x: 365, y: 75 };
 
 
+  // Use orgBinPosition in your panResponder1 code
   const panResponder1 = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
@@ -69,21 +104,43 @@ const GamePage = ({ navigation }) => {
         setDidSlide1(true);
         setObject1Position({ x: gesture.moveX - 70, y: gesture.moveY - 30 });
       },
-      onPanResponder1Release: () => {
-        // Check if apple is within ewaste bin
-        if (
-          (applePosition.x == orgBinPosition.x) && (applePosition.y == orgBinPosition.y)
-        ) {
-            setObjInBin(true);
-            console.log("location matches");
+      onPanResponderRelease: (event, gesture) => {
+
+        const obj1X = gesture.moveX - 80;
+        const obj1Y = gesture.moveY - 30;
+        const orgBinX = orgBinPosition.x + 40;
+        const orgBinY = orgBinPosition.y - 20;
+        const radius = 80; // Set the radius around the bin
+
+        // Calculate the distance between the object and the bin using Pythagorean theorem
+        const distance = Math.sqrt(Math.pow(obj1X - orgBinX, 2) + Math.pow(obj1Y - orgBinY, 2));
+
+        // Define the boundaries of the organicsBin area with the radius taken into account
+        const orgBinLeft = orgBinX - radius;
+        const orgBinRight = orgBinX + 200 + radius;
+        const orgBinTop = orgBinY - radius;
+        const orgBinBottom = orgBinY + 100 + radius;
+
+        // Check if item is within ewaste bin
+        if ((obj1X >= orgBinLeft) && (obj1X <= orgBinRight) && (obj1Y >= orgBinTop) && (obj1Y <= orgBinBottom) && (distance <= radius)) {
+          setObjInBin(true);
+          if (organicWaste.includes(object1Image)) {
+            //counter++ or something
+            console.log(obj1X, obj1Y);
+            console.log("location matches AND ITEM MATCHES!");
+          } else {
+            console.log("location matches BUT ITEM DOES NOT MATCH!");
+            console.log(obj1X, obj1Y);
           }
-          else{
-            setObjInBin(false);
-            console.log("location doesn't matches");
-          }
+        } else {
+          console.log("location does not match");
+          console.log(obj1X, obj1Y);
+        }
       },
     })
   ).current;
+
+
 
   const panResponder2 = useRef(
   PanResponder.create({
@@ -162,22 +219,11 @@ const panResponder3 = useRef(
         iterationCount="infinite"
         duration={3000}
       />
-        //Winsome's edit- image changes
-      <Animated.Image source={ewasteBinImage} style={styles.binImage} />
-      <Animated.Image source={recyclingBinImage} style={styles.binImage} />
-      <Animated.Image source={organicsBinImage} style={styles.binImage } />
-      <Animated.Image source={landfillImage} style={styles.landfillImage} />
 
-      <Animated.Image
-        source={appleImage}
-        style={
-          didSlide
-            ? [styles.appleImage, { top: applePosition.y, left: applePosition.x}, {opacity: inBin ? 0 : 1 }]
-            : [styles.appleImage, { transform: appleAnimatedValue.getTranslateTransform() }, {opacity: inBin ? 0 : 1 }]
-        }
-        {...panResponder.panHandlers}
-      />
-
+      <Image source={ewasteBinImage} style={styles.binImage} />
+      <Image source={recyclingBinImage} style={styles.binImage} />
+      <Image source={organicsBinImage} style={styles.binImage} />
+      <Image source={landfillImage} style={styles.landfillImage} />
 
       <Animated.Image
         source={object1Image}
