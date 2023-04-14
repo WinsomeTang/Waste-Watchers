@@ -8,6 +8,7 @@ import SignUpPage from './SignUpPage';
 import LogInPage from './LogInPage';
 import GamePage from './GamePage';
 import HowToPlayPage from './HowToPlayPage';
+import GameOverPage from './GameOverPage';
 
 
 async function changeScreenOrientation() {
@@ -33,6 +34,7 @@ export default function App() {
         <Stack.Screen name="WhyAccount" component={WhyAccountPage} />
         <Stack.Screen name="Game" component={GamePage} />
         <Stack.Screen name="HowToPlay" component={HowToPlayPage} />
+        <Stack.Screen name="GameOver" component={GameOverPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
