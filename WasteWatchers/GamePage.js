@@ -16,36 +16,108 @@ import ewasteBinImage from "./images/EwasteBin.png";
 import recyclingBinImage from "./images/RecyclingBin.png";
 import organicsBinImage from "./images/OrganicsBin.png";
 import * as Animatable from "react-native-animatable";
-import appleImage from "./images/Apple.png";
+
+const trashImages = [
+    require('./trashImages/Apple.png'),
+    require('./trashImages/Banana.png'),
+    require('./trashImages/Batteries.png'),
+    require('./trashImages/Bottle.png'),
+    require('./trashImages/CarBattery.png'),
+    require('./trashImages/CoffeeCup.png'),
+    require('./trashImages/FishBone.png'),
+    require('./trashImages/Mask.png'),
+    require('./trashImages/MetalCan.png'),
+    require('./trashImages/Mug.png'),
+    require('./trashImages/PaperPlane.png'),
+    require('./trashImages/Phone.png'),
+    require('./trashImages/Pizza.png'),
+    require('./trashImages/PlasticBag.png'),
+    require('./trashImages/Straw.png'),
+    require('./trashImages/Tab.png'),
+];
+
+const getRandomTrashImage = () => {
+    const randomIndex = Math.floor(Math.random() * trashImages.length);
+    return trashImages[randomIndex];
+};
+
+// Generate a random duration between 1 and 5 seconds
+const getRandomDuration = () => {
+  return Math.floor(Math.random() * 2500) + 1000; // Random duration between 1 and 3.5 seconds
+};
 
 const GamePage = ({ navigation }) => {
-  const [applePosition, setApplePosition] = useState({ x: 0, y: 0 });
-  const appleAnimatedValue = useRef(new Animated.ValueXY({ x: 10, y: 10 })).current;
-  const [didSlide, setDidSlide] = useState(false);
+  const [object1Position, setObject1Position] = useState({ x: 0, y: 0 });
+  const [object2Position, setObject2Position] = useState({ x: 0, y: 0 });
+  const [object3Position, setObject3Position] = useState({ x: 0, y: 0 });
+  const object1AnimatedValue = useRef(new Animated.ValueXY({ x: 10, y: 10 })).current;
+  const object2AnimatedValue = useRef(new Animated.ValueXY({ x: 10, y: 10 })).current;
+  const object3AnimatedValue = useRef(new Animated.ValueXY({ x: 10, y: 10 })).current;
+  const [didSlide1, setDidSlide1] = useState(false);
+  const [didSlide2, setDidSlide2] = useState(false);
+  const [didSlide3, setDidSlide3] = useState(false);
+  const [object1Image, setObject1Image] = useState(getRandomTrashImage());
+  const [object2Image, setObject2Image] = useState(getRandomTrashImage());
+  const [object3Image, setObject3Image] = useState(getRandomTrashImage());
 
-  const panResponder = useRef(
+
+
+  const panResponder1 = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onPanResponderMove: (event, gesture) => {
-        setDidSlide(true);
-        setApplePosition({ x: gesture.moveX, y: gesture.moveY });
+        setDidSlide1(true);
+        setObject1Position({ x: gesture.moveX - 70, y: gesture.moveY - 30 });
       },
-      onPanResponderRelease: () => {},
+      onPanResponder1Release: () => {},
     })
   ).current;
+
+  const panResponder2 = useRef(
+  PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onPanResponderMove: (event, gesture) => {
+      setDidSlide2(true);
+      setObject2Position({ x: gesture.moveX - 70, y: gesture.moveY - 30 });
+    },
+    onPanResponderRelease: () => {},
+  })
+).current;
+
+const panResponder3 = useRef(
+  PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onPanResponderMove: (event, gesture) => {
+      setDidSlide3(true);
+      setObject3Position({ x: gesture.moveX - 70, y: gesture.moveY - 30});
+    },
+    onPanResponderRelease: () => {},
+  })
+).current;
 
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
 
     // Add the animation code here
-    Animated.timing(appleAnimatedValue, {
-      toValue: { x: 350, y: 100 },
-
-      duration: 4000,
+    Animated.timing(object1AnimatedValue, {
+      toValue: { x: 360, y: 220 },
+      duration: getRandomDuration(),
       useNativeDriver: false,
       isInteraction: false,
     }).start();
-  }, [navigation, appleAnimatedValue]);
+    Animated.timing(object2AnimatedValue, {
+      toValue: { x: 360, y: 220 },
+      duration: getRandomDuration(),
+      useNativeDriver: false,
+      isInteraction: false,
+    }).start();
+    Animated.timing(object3AnimatedValue, {
+      toValue: { x: 360, y: 220 },
+      duration: getRandomDuration(),
+      useNativeDriver: false,
+      isInteraction: false,
+    }).start();
+  }, [navigation, object1AnimatedValue, object2AnimatedValue, object3AnimatedValue]);
 
   return (
     <View style={styles.container}>
@@ -85,16 +157,65 @@ const GamePage = ({ navigation }) => {
       <Image source={landfillImage} style={styles.landfillImage} />
 
       <Animated.Image
-        source={appleImage}
+        source={object1Image}
         style={
-          didSlide
-            ? [styles.appleImage, { top: applePosition.y, left: applePosition.x }]
-            : [styles.appleImage, { transform: appleAnimatedValue.getTranslateTransform() }]
+          didSlide1
+            ? [styles.objectImage, { top: object1Position.y, left: object1Position.x }]
+            : [styles.objectImage, { transform: object1AnimatedValue.getTranslateTransform() }]
         }
-        {...panResponder.panHandlers}
+        {...panResponder1.panHandlers}
       />
+      <Animated.Image
+          source={object2Image}
+          style={
+            didSlide2
+              ? [styles.objectImage, { top: object2Position.y, left: object2Position.x }]
+              : [styles.objectImage, { transform: object2AnimatedValue.getTranslateTransform() }]
+          }
+          {...panResponder2.panHandlers}
+        />
+        <Animated.Image
+          source={object3Image}
+          style={
+            didSlide3
+              ? [styles.objectImage, { top: object3Position.y, left: object3Position.x }]
+              : [styles.objectImage, { transform: object3AnimatedValue.getTranslateTransform() }]
+          }
+          {...panResponder3.panHandlers}
+        />
     </View>
   );
+
+
+  // OBJECT1RESPAWN NEEDS TESTING, ADD IT AFTER YOU HIDE OBJECT1 AFTER,
+  // IT GETS DROPPED IN A BIN
+  // Respawns Object1 with new image & at start of belt
+  const object1Respawn = () => {
+    const [object1Position, setObject1Position] = useState({ x: 0, y: 0 });
+    const object1AnimatedValue = useRef(new Animated.ValueXY({ x: 10, y: 10 })).current;
+    const [didSlide1, setDidSlide1] = useState(false);
+    const [object1Image, setObject1Image] = useState(getRandomTrashImage());
+    setDidSlide1(false);
+    useEffect(() => {
+      Animated.timing(object1AnimatedValue, {
+        toValue: { x: 360, y: 220 },
+        duration: getRandomDuration(),
+        useNativeDriver: false,
+        isInteraction: false,
+      }).start();
+    }, [navigation, object1AnimatedValue]);
+    return (
+      <Animated.Image
+        source={object1Image}
+        style={
+          didSlide1
+            ? [styles.objectImage, { top: object1Position.y, left: object1Position.x }]
+            : [styles.objectImage, { transform: object1AnimatedValue.getTranslateTransform() }]
+        }
+        {...panResponder1.panHandlers}
+      />
+    );
+  };
 };
 
 const styles = StyleSheet.create({
@@ -150,14 +271,14 @@ const styles = StyleSheet.create({
     position: "absolute",
     resizeMode: "contain",
   },
-  appleImage: {
+  objectImage: {
     position: "absolute",
     resizeMode: "contain",
-    width: "10%",
-    height: "10%",
+    width: "20%",
+    height: "20%",
     top: "10%",
     left: "10%",
-    zIndex: 999, // Add zIndex to make the apple draggable over other elements
+    zIndex: 999, // Added zIndex to make the apple draggable over other elements
   },
 });
 
