@@ -59,7 +59,7 @@ const GamePage = ({ navigation }) => {
   const [object1Image, setObject1Image] = useState(getRandomTrashImage());
   const [object2Image, setObject2Image] = useState(getRandomTrashImage());
   const [object3Image, setObject3Image] = useState(getRandomTrashImage());
-
+  const [inBin, setObjInBin] = useState(false);
 
 
   const panResponder1 = useRef(
@@ -69,7 +69,19 @@ const GamePage = ({ navigation }) => {
         setDidSlide1(true);
         setObject1Position({ x: gesture.moveX - 70, y: gesture.moveY - 30 });
       },
-      onPanResponder1Release: () => {},
+      onPanResponder1Release: () => {
+        // Check if apple is within ewaste bin
+        if (
+          (applePosition.x == orgBinPosition.x) && (applePosition.y == orgBinPosition.y)
+        ) {
+            setObjInBin(true);
+            console.log("location matches");
+          }
+          else{
+            setObjInBin(false);
+            console.log("location doesn't matches");
+          }
+      },
     })
   ).current;
 
@@ -150,11 +162,22 @@ const panResponder3 = useRef(
         iterationCount="infinite"
         duration={3000}
       />
+        //Winsome's edit- image changes
+      <Animated.Image source={ewasteBinImage} style={styles.binImage} />
+      <Animated.Image source={recyclingBinImage} style={styles.binImage} />
+      <Animated.Image source={organicsBinImage} style={styles.binImage } />
+      <Animated.Image source={landfillImage} style={styles.landfillImage} />
 
-      <Image source={ewasteBinImage} style={styles.binImage} />
-      <Image source={recyclingBinImage} style={styles.binImage} />
-      <Image source={organicsBinImage} style={styles.binImage} />
-      <Image source={landfillImage} style={styles.landfillImage} />
+      <Animated.Image
+        source={appleImage}
+        style={
+          didSlide
+            ? [styles.appleImage, { top: applePosition.y, left: applePosition.x}, {opacity: inBin ? 0 : 1 }]
+            : [styles.appleImage, { transform: appleAnimatedValue.getTranslateTransform() }, {opacity: inBin ? 0 : 1 }]
+        }
+        {...panResponder.panHandlers}
+      />
+
 
       <Animated.Image
         source={object1Image}
