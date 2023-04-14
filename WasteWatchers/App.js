@@ -32,7 +32,7 @@ export default function App() {
         <Stack.Screen name="LogIn" component={LogInPage} />
         <Stack.Screen name="WhyAccount" component={WhyAccountPage} />
         <Stack.Screen name="Game" component={GamePage} />
-        <Stack.Screen name="HowToPlayPage" component={HowToPlayPage} />
+        <Stack.Screen name="HowToPlay" component={HowToPlayPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -119,7 +119,6 @@ function WhyAccountPage({ navigation }) {
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
